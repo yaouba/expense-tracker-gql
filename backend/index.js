@@ -15,19 +15,25 @@ import mergedRypeDefs from "./typeDefs/index.js";
 import { connectDB } from "./db/connectDB.js";
 import { buildContext } from "graphql-passport";
 
+import { configurePassport } from "./passport/passport.config.js";
+
 dotenv.config();
 const app = express();
+configurePassport();
 
 const httpServer = http.createServer(app);
 
 const MongoDBStore = connectMongo(session);
 
 const store = new MongoDBStore({
-    uri: process.env.MONGODB_URI,
+    
+    uri: process.env.MONGO_URI,
     collection: "sessions",
 });
 
 store.on("error", (error) => {
+    console.log('MongoDB session store error');
+    
     console.log(error);
 });
 
